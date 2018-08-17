@@ -2,7 +2,7 @@ var http = require('http');
 
 var fs = require('fs');
 
-var path = require('http');
+var path = require('path');
 
 var mime = require('mime');
 
@@ -34,7 +34,7 @@ function serveStatic(response,cache,absPath){
                     if(err){
                         send404(response);
                     }else{
-                        cachep[absPath] = data;
+                        cache[absPath] = data;
                         sendFile(response,absPath,data);
                     }
                 })
@@ -48,14 +48,17 @@ function serveStatic(response,cache,absPath){
 var server =http.createServer(function(request,response){
     var filePath = false;
     if(request.url == '/'){
-        filePath = 'public/index.html';
+        filePath = 'public/index.html';``
     }else{
         filePath = 'public'+request.url;
     }
-    var absPath = './'+ filePath;
+    var absPath = __dirname +'/'+ filePath;
     serveStatic(response,cache,absPath);
 })
 
 server.listen(3000,function(){
     console.log('Server listening on port 3000');
 })
+
+var chatServer = require('./lib/chat_server');
+chatServer.listen(server);
